@@ -5,20 +5,22 @@ import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { useAppSelector } from '../redux/hooks';
 import { useTheme } from '../hooks/ThemeContext';
-import { AppHeader, BottomTabIcon } from '../components/common';
-import JobsScreen from '../screens/jobs/JobsScreen';
-import FeedScreen from '../screens/feed/FeedScreen';
+import { AppHeader } from '../components/common';
+import ActivityScreen from '../screens/activity/ActivityScreen';
 import LoginScreen from '../screens/auth/LoginScreen';
 import SplashScreen from '../screens/auth/SplashScreen';
 import SignUpScreen from '../screens/auth/SignUpScreen';
-import SearchScreen from '../screens/search/SearchScreen';
 import ProfileScreen from '../screens/profile/ProfileScreen';
-import CreatePostScreen from '../screens/feed/CreatePostScreen';
-import MessagesScreen from '../screens/messages/MessagesScreen';
-import ConnectionsScreen from '../screens/connections/ConnectionsScreen';
-import NotificationsScreen from '../screens/notifications/NotificationsScreen';
+import ConversationsScreen from '../screens/messages/ConversationsScreen';
+import ChatScreen from '../screens/messages/ChatScreen';
+import CallsScreen from '../screens/calls/CallsScreen';
+import FilesScreen from '../screens/files/FilesScreen';
+import CalendarScreen from '../screens/calendar/CalendarScreen';
+import MoreScreen from '../screens/more/MoreScreen';
 import Icons from '../utils/Icons';
-import CustomIcon from '../components/CustomIcon';
+import SearchScreen from '../screens/search/SearchScreen';
+import CallDetailScreen from '../screens/calls/CallDetailScreen';
+import BottomTabs, { TabIcon } from '../components/BottomTabs';
 
 const Stack = createNativeStackNavigator();
 const Tab = createBottomTabNavigator();
@@ -44,9 +46,11 @@ const AppTabs = () => {
 
   return (
     <Tab.Navigator
+      tabBar={props => <BottomTabs {...props} />}
       screenOptions={({ navigation }) => ({
-        tabBarActiveTintColor: colors.linkedin_blue,
+        tabBarActiveTintColor: colors.teams_purple,
         tabBarInactiveTintColor: '#8A8D91',
+        tabBarShowLabel: true,
         tabBarLabelStyle: {
           fontSize: 11,
           fontWeight: '600',
@@ -57,12 +61,13 @@ const AppTabs = () => {
           borderTopColor: '#D0CACE',
           borderTopWidth: 1,
           elevation: 8,
-          paddingBottom:  0,
+          paddingBottom: 0,
           paddingTop: 7,
           shadowColor: '#000000',
           shadowOpacity: 0.08,
           shadowRadius: 8,
         },
+        keyboardHidesTabBar: false,
         tabBarBadgeStyle: {
           backgroundColor: '#CC1016',
           color: '#FFFFFF',
@@ -82,58 +87,69 @@ const AppTabs = () => {
       })}
     >
       <Tab.Screen
-        name="FeedTab"
-        component={FeedScreen}
+        name="ActivityTab"
+        component={ActivityScreen}
         options={{
-          title: 'Feed',
-          tabBarLabel: 'Home',
-          tabBarIcon: ({ color, focused }) => (
-            <CustomIcon icon={Icons.homeIcon} color={color} />
+          title: 'Activity',
+          tabBarLabel: 'Activity',
+          tabBarBadge: unreadNotifications > 0 ? unreadNotifications : undefined,
+          tabBarIcon: ({ color }) => (
+            <TabIcon icon={Icons.activityIcon} color={color} />
           ),
         }}
       />
       <Tab.Screen
-        name="ConnectionsTab"
-        component={ConnectionsScreen}
+        name="ChatTab"
+        component={ConversationsScreen}
         options={{
-          title: 'My Network',
-          tabBarLabel: 'Network',
-          tabBarIcon: ({ color, focused }) => (
-            <CustomIcon icon={Icons.networkIcon} color={color} />
+          title: 'Chat',
+          tabBarLabel: 'Chat',
+          tabBarIcon: ({ color }) => (
+            <TabIcon icon={Icons.teamChatIcon} color={color} />
           ),
         }}
       />
       <Tab.Screen
-        name="CreatePostTab"
-        component={CreatePostScreen}
+        name="CallsTab"
+        component={CallsScreen}
         options={{
-          title: 'Post',
-          tabBarLabel: 'Post',
-          tabBarIcon: ({ color, focused }) => (
-            <CustomIcon icon={Icons.plusIcon} color={color} />
+          title: 'Calls',
+          tabBarLabel: 'Calls',
+          tabBarIcon: ({ color }) => (
+            <TabIcon icon={Icons.callsIcon} color={color} />
           ),
         }}
       />
       <Tab.Screen
-        name="NotificationsTab"
-        component={NotificationsScreen}
+        name="FilesTab"
+        component={FilesScreen}
         options={{
-          title: 'Notifications',
-          tabBarLabel: 'Notifications',
-          tabBarBadge: unreadNotifications || undefined,
-          tabBarIcon: ({ color, focused }) => (
-            <CustomIcon icon={Icons.bellIcon} color={color} />
+          title: 'Files',
+          tabBarLabel: 'Files',
+          tabBarIcon: ({ color }) => (
+            <TabIcon icon={Icons.fileIcon} color={color} />
           ),
         }}
       />
       <Tab.Screen
-        name="JobsTab"
-        component={JobsScreen}
+        name="CalendarTab"
+        component={CalendarScreen}
         options={{
-          title: 'Jobs',
-          tabBarLabel: 'Jobs',
-          tabBarIcon: ({ color, focused }) => (
-            <CustomIcon icon={Icons.jobsIcon} color={color} />
+          title: 'Calendar',
+          tabBarLabel: 'Calendar',
+          tabBarIcon: ({ color }) => (
+            <TabIcon icon={Icons.calendarIcon} color={color} />
+          ),
+        }}
+      />
+      <Tab.Screen
+        name="MoreTab"
+        component={MoreScreen}
+        options={{
+          title: 'More',
+          tabBarLabel: 'More',
+          tabBarIcon: ({ color }) => (
+            <TabIcon icon={Icons.verticalDotsIcon} color={color} />
           ),
         }}
       />
@@ -154,13 +170,15 @@ const RootNavigator = () => {
             <Stack.Screen name="App" component={AppTabs} />
             <Stack.Screen
               name="Messages"
-              component={MessagesScreen}
+              component={ChatScreen}
               options={{
-                headerShown: true,
-                headerTitle: 'Messaging',
-                headerStyle: styles.stackHeader,
-                headerTitleStyle: styles.stackHeaderTitle,
+                headerShown: false,
               }}
+            />
+            <Stack.Screen
+              name="CallDetail"
+              component={CallDetailScreen}
+              options={{ headerShown: true, headerTitle: 'Call details' }}
             />
             <Stack.Screen
               name="Search"

@@ -1,7 +1,7 @@
 import axios, { AxiosInstance, AxiosError } from 'axios';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
-const API_BASE_URL = 'https://api.linkedinclone.com/v1';
+const API_BASE_URL = 'https://api.msteamsclone.local/v1';
 
 const api: AxiosInstance = axios.create({
   baseURL: API_BASE_URL,

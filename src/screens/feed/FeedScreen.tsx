@@ -2,7 +2,7 @@ import React, { useMemo, useState } from 'react';
 import { FlatList, StyleSheet } from 'react-native';
 import { addComment, addPost, likePost, repostPost, unlikePost } from '../../redux';
 import { useAppDispatch, useAppSelector } from '../../redux/hooks';
-import { FeedComposer, getInitials, LinkedInNewsCard, PostCard } from '../../components/feed';
+import { FeedComposer, getInitials, TeamsActivityCard, PostCard } from '../../components/feed';
 import { Post } from '../../types';
 import { COLORS, SPACING } from '../../styles';
 
@@ -24,7 +24,7 @@ const FeedScreen: React.FC = () => {
 
   const author = {
     id: user?.id ?? 'user-1',
-    firstName: user?.firstName ?? profile?.firstName ?? 'LinkedIn',
+    firstName: user?.firstName ?? profile?.firstName ?? 'Teams',
     lastName: user?.lastName ?? profile?.lastName ?? 'Member',
     headline: profile?.headline,
   };
@@ -102,7 +102,7 @@ const FeedScreen: React.FC = () => {
             onChangeDraft={setDraft}
             onPost={publishPost}
           />
-          <LinkedInNewsCard />
+          <TeamsActivityCard />
         </>
       }
       contentContainerStyle={styles.listContent}

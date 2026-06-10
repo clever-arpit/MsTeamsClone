@@ -7,6 +7,7 @@ import messageReducer from './slices/messageSlice';
 import notificationReducer from './slices/notificationSlice';
 import jobsReducer from './slices/jobsSlice';
 import uiReducer from './slices/uiSlice';
+import teamsReducer from './slices/teamsSlice';
 
 export const store = configureStore({
   reducer: {
@@ -18,6 +19,7 @@ export const store = configureStore({
     notification: notificationReducer,
     jobs: jobsReducer,
     ui: uiReducer,
+    teams: teamsReducer,
   },
   middleware: (getDefaultMiddleware) =>
     getDefaultMiddleware({

@@ -5,7 +5,7 @@ import { COLORS } from '../../styles';
 const SplashScreen: React.FC = () => {
   return (
     <View style={styles.container}>
-      <Text style={styles.logo}>LinkedinClone</Text>
+      <Text style={styles.logo}>MsTeamsClone</Text>
       <Text style={styles.subtitle}>Loading...</Text>
     </View>
   );

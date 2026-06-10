@@ -17,8 +17,8 @@ const CreatePostScreen: React.FC<{ navigation: any }> = ({ navigation }) => {
   const author = useMemo(
     () => ({
       id: user?.id ?? 'user-1',
-      firstName: user?.firstName ?? profile?.firstName ?? 'LinkedIn',
-      lastName: user?.lastName ?? profile?.lastName ?? 'Member',
+      firstName: user?.firstName ?? profile?.firstName ?? 'Teams',
+      lastName: user?.lastName ?? profile?.lastName ?? 'User',
       headline: profile?.headline,
     }),
     [profile?.firstName, profile?.headline, profile?.lastName, user?.firstName, user?.id, user?.lastName]

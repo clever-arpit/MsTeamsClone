@@ -18,7 +18,7 @@ import { COLORS, SPACING, TYPOGRAPHY } from '../../styles';
 const LoginScreen: React.FC<{ navigation: any }> = ({ navigation }) => {
   const dispatch = useAppDispatch();
   const { loading, error } = useAppSelector((state) => state.auth);
-  const [email, setEmail] = useState('arpit@linkedinclone.dev');
+  const [email, setEmail] = useState('arpit@msteamsclone.dev');
   const [password, setPassword] = useState('password');
 
   const handleLogin = () => {
@@ -47,9 +47,9 @@ const LoginScreen: React.FC<{ navigation: any }> = ({ navigation }) => {
       behavior={Platform.OS === 'ios' ? 'padding' : undefined}
     >
       <ScrollView contentContainerStyle={styles.content} keyboardShouldPersistTaps="handled">
-        <Text style={styles.brand}>LinkedIn</Text>
+        <Text style={styles.brand}>MS Teams</Text>
         <Text style={styles.title}>Sign in</Text>
-        <Text style={styles.subtitle}>Stay updated on your professional world.</Text>
+        <Text style={styles.subtitle}>Stay connected and collaborate with your team.</Text>
 
         <View style={styles.form}>
           <TextInput
@@ -87,7 +87,7 @@ const LoginScreen: React.FC<{ navigation: any }> = ({ navigation }) => {
           </View>
 
           <Pressable style={styles.outlineButton} onPress={() => navigation.navigate('SignUp')}>
-            <Text style={styles.outlineButtonText}>New to LinkedIn? Join now</Text>
+            <Text style={styles.outlineButtonText}>New to Teams? Join now</Text>
           </Pressable>
         </View>
       </ScrollView>

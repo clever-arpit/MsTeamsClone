@@ -2,10 +2,10 @@ import React from 'react';
 import { StyleSheet, Text, View } from 'react-native';
 import { COLORS, SPACING, TYPOGRAPHY } from '../../styles';
 
-const LinkedInNewsCard: React.FC = () => (
+const TeamsActivityCard: React.FC = () => (
   <View style={styles.container}>
     <View style={styles.headerRow}>
-      <Text style={styles.title}>LinkedIn News</Text>
+      <Text style={styles.title}>Activity</Text>
       <View style={styles.infoDot}>
         <Text style={styles.infoText}>i</Text>
       </View>
@@ -13,15 +13,15 @@ const LinkedInNewsCard: React.FC = () => (
     <View style={styles.story}>
       <Text style={styles.bullet}>•</Text>
       <View style={styles.storyBody}>
-        <Text style={styles.storyTitle}>Mobile teams focus on faster onboarding</Text>
-        <Text style={styles.storyMeta}>3h ago • 1,246 readers</Text>
+        <Text style={styles.storyTitle}>Your team deployed a new release</Text>
+        <Text style={styles.storyMeta}>2h ago • 12 people notified</Text>
       </View>
     </View>
     <View style={styles.story}>
       <Text style={styles.bullet}>•</Text>
       <View style={styles.storyBody}>
-        <Text style={styles.storyTitle}>AI workflows move into product sprints</Text>
-        <Text style={styles.storyMeta}>5h ago • 842 readers</Text>
+        <Text style={styles.storyTitle}>Meeting notes shared in Project Alpha</Text>
+        <Text style={styles.storyMeta}>6h ago • 5 people commented</Text>
       </View>
     </View>
   </View>
@@ -84,4 +84,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default LinkedInNewsCard;
+export default TeamsActivityCard;

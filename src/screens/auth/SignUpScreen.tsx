@@ -40,7 +40,7 @@ const SignUpScreen: React.FC<{ navigation: any }> = ({ navigation }) => {
     dispatch(setProfile({
       ...user,
       headline: 'Open to building meaningful professional connections',
-      about: 'New to LinkedInClone and ready to share updates, follow peers, and grow a network.',
+      about: 'New to MS Teams clone — ready to share updates, collaborate, and organize work with your team.',
       location: 'India',
       updatedAt: now,
       followersCount: 0,
@@ -56,7 +56,7 @@ const SignUpScreen: React.FC<{ navigation: any }> = ({ navigation }) => {
       behavior={Platform.OS === 'ios' ? 'padding' : undefined}
     >
       <ScrollView contentContainerStyle={styles.content} keyboardShouldPersistTaps="handled">
-        <Text style={styles.brand}>LinkedIn</Text>
+        <Text style={styles.brand}>MS Teams</Text>
         <Text style={styles.title}>Join your professional community</Text>
 
         <View style={styles.form}>
@@ -105,7 +105,7 @@ const SignUpScreen: React.FC<{ navigation: any }> = ({ navigation }) => {
           </Pressable>
 
           <Pressable style={styles.linkButton} onPress={() => navigation.navigate('Login')}>
-            <Text style={styles.linkText}>Already on LinkedIn? Sign in</Text>
+            <Text style={styles.linkText}>Already on Teams? Sign in</Text>
           </Pressable>
         </View>
       </ScrollView>

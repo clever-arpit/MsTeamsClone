@@ -12,6 +12,7 @@ export { default as messageReducer } from './slices/messageSlice';
 export { default as notificationReducer } from './slices/notificationSlice';
 export { default as jobsReducer } from './slices/jobsSlice';
 export { default as uiReducer } from './slices/uiSlice';
+export { default as teamsReducer } from './slices/teamsSlice';
 
 // Export slice actions with unique names to avoid re-export collisions.
 export {
@@ -102,3 +103,10 @@ export {
   applyToJob,
 } from './slices/jobsSlice';
 export { setTheme, setBottomTabIndex, setOnlineStatus, setModalOpen } from './slices/uiSlice';
+export {
+  markActivityRead,
+  markAllActivitiesRead,
+  setSelectedFile,
+  setTeamsSearchQuery,
+  toggleFileFavorite,
+} from './slices/teamsSlice';

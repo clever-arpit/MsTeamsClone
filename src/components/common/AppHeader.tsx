@@ -1,13 +1,12 @@
 import React from 'react';
-import { StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import { StyleSheet, TouchableOpacity, View } from 'react-native';
 import { useAppSelector } from '../../redux/hooks';
-import { SPACING, TYPOGRAPHY } from '../../styles';
 import Avatar from './Avatar';
 import CustomIcon from '../CustomIcon';
 import Icons from '../../utils/Icons';
 import { useTheme } from '../../hooks/ThemeContext';
 import CustomText from '../CustomText';
-import SearchBar from '../SearchBar';
+import SearchInput from '../SearchInput';
 
 interface AppHeaderProps {
   navigation: any;
@@ -36,10 +35,12 @@ const AppHeader: React.FC<AppHeaderProps> = ({ navigation }) => {
         <Avatar initials={initials} size="small" />
       </TouchableOpacity>
       <View style={{ flex: 1 }}>
-        <SearchBar
+        <SearchInput
           value=""
           onChangeText={() => {}}
-          onSubmitEditing={() => {}}
+          onSubmitEditing={() => rootNavigation?.navigate('Search')}
+          onFocus={() => rootNavigation?.navigate('Search')}
+          placeholder="Search Teams"
         />
       </View>
       <TouchableOpacity

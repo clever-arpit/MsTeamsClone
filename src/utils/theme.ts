@@ -98,7 +98,7 @@ export interface ThemeColors {
   choose_file_background?: string;
   display_btn_background?: string;
   table_header_background?: string;
-  linkedin_blue?: string;
+  teams_purple?: string;
 }
 
 export const lightTheme: ThemeColors = {
@@ -199,7 +199,7 @@ export const lightTheme: ThemeColors = {
   choose_file_background: '#E7E7E7',
   display_btn_background: '#fff',
   table_header_background: '#D2E5F7',
-  linkedin_blue: '#0A66C2'
+  teams_purple: '#6264A7'
 };
 
 export const darkTheme: ThemeColors = {
@@ -300,7 +300,7 @@ export const darkTheme: ThemeColors = {
   choose_file_background: '#47474A',
   display_btn_background: '#47474A',
   table_header_background: '#222224',
-  linkedin_blue: '#0A66C2'
+  teams_purple: '#6264A7'
 };
 
 export const themes = { light: lightTheme, dark: darkTheme };

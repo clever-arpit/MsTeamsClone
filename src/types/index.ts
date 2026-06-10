@@ -6,6 +6,7 @@ export * from './connection';
 export * from './message';
 export * from './notification';
 export * from './job';
+export * from './teams';
 
 export type AsyncStatus = 'idle' | 'loading' | 'succeeded' | 'failed';
 

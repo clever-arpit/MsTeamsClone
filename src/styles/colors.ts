@@ -1,9 +1,9 @@
 // Color palette
 export const COLORS = {
   // Primary colors
-  PRIMARY: '#0A66C2',
-  PRIMARY_LIGHT: '#E7F3FF',
-  PRIMARY_DARK: '#004182',
+  PRIMARY: '#6264A7',
+  PRIMARY_LIGHT: '#E9E9F6',
+  PRIMARY_DARK: '#3F3D7A',
 
   // Secondary colors
   SECONDARY: '#06524B',
@@ -39,12 +39,12 @@ export const COLORS = {
   FACEBOOK: '#1877F2',
   TWITTER: '#1DA1F2',
   GOOGLE: '#EA4335',
-  LINKEDIN: '#0A66C2',
+  TEAMS: '#6264A7',
 };
 
 // Dark theme colors
 export const DARK_COLORS = {
-  PRIMARY: '#0A66C2',
+  PRIMARY: '#6264A7',
   BACKGROUND: '#0D0D0D',
   SURFACE: '#161616',
   TEXT_PRIMARY: '#FFFFFF',
