@@ -61,8 +61,8 @@ const SearchInput: React.FC<SearchInputProps> = ({
 const styles = StyleSheet.create({
   container: {
     alignItems: 'center',
-    backgroundColor: '#F5F5FA',
-    borderColor: '#E1E1EC',
+    backgroundColor: '#202020',
+    borderColor: '#2E2E2E',
     borderRadius: 8,
     borderWidth: 1,
     flexDirection: 'row',
@@ -71,11 +71,11 @@ const styles = StyleSheet.create({
   },
   searchIcon: {
     height: 17,
-    tintColor: COLORS.TEXT_SECONDARY,
+    tintColor: '#9B9B9B',
     width: 17,
   },
   input: {
-    color: COLORS.TEXT_PRIMARY,
+    color: '#F4F4F4',
     flex: 1,
     fontFamily: Config.FONT_FAMILY,
     fontSize: 15,

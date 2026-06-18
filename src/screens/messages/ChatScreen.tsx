@@ -1,9 +1,8 @@
 import React, { useMemo } from 'react';
 import { SectionList, StyleSheet, Text, View } from 'react-native';
-import { RouteProp, useNavigation, useRoute } from '@react-navigation/native';
+import { RouteProp, useRoute } from '@react-navigation/native';
 import { addMessage, updateConversation } from '../../redux';
 import { useAppDispatch, useAppSelector } from '../../redux/hooks';
-import ChatHeader from '../../components/common/ChatHeader';
 import MessageInput from '../../components/common/MessageInput';
 import CustomIcon from '../../components/CustomIcon';
 import Icons from '../../utils/Icons';
@@ -25,8 +24,8 @@ const groupByDate = (messages: Message[]) => {
 };
 
 const ChatScreen: React.FC = () => {
-  const route = useRoute<RouteProp<Record<string, { conversationId: string }>, string>>();
-  const navigation = useNavigation();
+  const route =
+    useRoute<RouteProp<Record<string, { conversationId: string }>, string>>();
   const dispatch = useAppDispatch();
   const conversationId = route.params?.conversationId;
   const conversations = useAppSelector(state => state.message.conversations);
@@ -81,15 +80,12 @@ const ChatScreen: React.FC = () => {
 
   return (
     <View style={styles.screen}>
-      <ChatHeader
-        onBack={() => navigation.goBack()}
-        title={`${conversation.participant.firstName} ${conversation.participant.lastName}`}
-        subtitle={`${participant?.status ?? 'available'} • ${participant?.role ?? 'Team member'}`}
-      />
-
       <View style={styles.contextBar}>
         <CustomIcon icon={Icons.teamChatIcon} color={COLORS.PRIMARY} size={18} />
-        <Text style={styles.contextText}>Northstar Product / General</Text>
+        <Text style={styles.contextText}>
+          {participant?.status ?? 'available'} ·{' '}
+          {participant?.role ?? 'Team member'}
+        </Text>
       </View>
 
       <SectionList
@@ -116,6 +112,17 @@ const ChatScreen: React.FC = () => {
                 <Text style={[styles.bubbleText, mine && styles.myBubbleText]}>
                   {item.content}
                 </Text>
+                {item.content.includes('http') ? (
+                  <View style={styles.linkPreview}>
+                    <View style={styles.linkIcon}>
+                      <CustomIcon icon={Icons.webIcon} color="#DADADA" size={20} />
+                    </View>
+                    <View style={styles.linkMeta}>
+                      <Text style={styles.linkTitle}>AI agents and Expo overview</Text>
+                      <Text style={styles.linkHost}>docs.expo.dev</Text>
+                    </View>
+                  </View>
+                ) : null}
                 <Text style={[styles.messageMeta, mine && styles.myMessageMeta]}>
                   {new Date(item.createdAt).toLocaleTimeString('en', {
                     hour: 'numeric',
@@ -141,21 +148,21 @@ const ChatScreen: React.FC = () => {
 
 const styles = StyleSheet.create({
   bubble: {
-    backgroundColor: COLORS.BACKGROUND,
-    borderColor: '#EEEEF4',
-    borderRadius: 8,
+    backgroundColor: '#242424',
+    borderColor: '#343434',
+    borderRadius: 18,
     borderWidth: 1,
     maxWidth: '82%',
     padding: SPACING.M,
   },
   bubbleText: {
     ...TYPOGRAPHY.BODY2,
-    color: COLORS.TEXT_PRIMARY,
+    color: '#F4F4F4',
   },
   contextBar: {
     alignItems: 'center',
-    backgroundColor: '#F7F7FB',
-    borderBottomColor: '#E4E4EE',
+    backgroundColor: '#000000',
+    borderBottomColor: '#242424',
     borderBottomWidth: 1,
     flexDirection: 'row',
     gap: 8,
@@ -164,7 +171,7 @@ const styles = StyleSheet.create({
   },
   contextText: {
     ...TYPOGRAPHY.CAPTION,
-    color: COLORS.TEXT_SECONDARY,
+    color: '#9B9B9B',
     fontWeight: '600',
   },
   empty: {
@@ -178,7 +185,7 @@ const styles = StyleSheet.create({
   },
   messageMeta: {
     ...TYPOGRAPHY.CAPTION,
-    color: COLORS.TEXT_TERTIARY,
+    color: '#8F8F8F',
     marginTop: 6,
   },
   messageRow: {
@@ -188,6 +195,7 @@ const styles = StyleSheet.create({
   },
   messagesList: {
     padding: SPACING.M,
+    paddingBottom: SPACING.L,
   },
   miniAvatar: {
     alignItems: 'center',
@@ -203,8 +211,8 @@ const styles = StyleSheet.create({
     fontWeight: '700',
   },
   myBubble: {
-    backgroundColor: COLORS.PRIMARY,
-    borderColor: COLORS.PRIMARY,
+    backgroundColor: '#6264D8',
+    borderColor: '#6264D8',
   },
   myBubbleText: {
     color: COLORS.TEXT_INVERSE,
@@ -216,7 +224,7 @@ const styles = StyleSheet.create({
     justifyContent: 'flex-end',
   },
   screen: {
-    backgroundColor: '#F3F2F8',
+    backgroundColor: '#000000',
     flex: 1,
   },
   sectionHeader: {
@@ -225,18 +233,46 @@ const styles = StyleSheet.create({
   },
   sectionHeaderText: {
     ...TYPOGRAPHY.CAPTION,
-    backgroundColor: '#EDEDF7',
+    backgroundColor: '#000000',
     borderRadius: 8,
-    color: COLORS.TEXT_SECONDARY,
+    color: '#9B9B9B',
     overflow: 'hidden',
     paddingHorizontal: SPACING.S,
     paddingVertical: 3,
   },
   senderName: {
     ...TYPOGRAPHY.CAPTION,
-    color: COLORS.TEXT_SECONDARY,
+    color: '#BDBDBD',
     fontWeight: '700',
     marginBottom: 4,
+  },
+  linkHost: {
+    ...TYPOGRAPHY.BODY2,
+    color: '#9B9B9B',
+    marginTop: 2,
+  },
+  linkIcon: {
+    alignItems: 'center',
+    flex: 1,
+    justifyContent: 'center',
+    minHeight: 160,
+  },
+  linkMeta: {
+    borderTopColor: '#3A3A3A',
+    borderTopWidth: 1,
+    padding: SPACING.M,
+  },
+  linkPreview: {
+    backgroundColor: '#2A2A2A',
+    borderColor: '#3A3A3A',
+    borderRadius: 14,
+    borderWidth: 1,
+    marginTop: SPACING.M,
+    overflow: 'hidden',
+  },
+  linkTitle: {
+    ...TYPOGRAPHY.SUBTITLE2,
+    color: '#F4F4F4',
   },
 });
 

@@ -8,10 +8,9 @@ import {
   View,
 } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
-import { markMessageAsRead, setTeamsSearchQuery } from '../../redux';
+import { markMessageAsRead } from '../../redux';
 import { useAppDispatch, useAppSelector } from '../../redux/hooks';
 import CustomIcon from '../../components/CustomIcon';
-import SearchInput from '../../components/SearchInput';
 import Icons from '../../utils/Icons';
 import { COLORS, SPACING, TYPOGRAPHY } from '../../styles';
 import { Conversation } from '../../types';
@@ -28,7 +27,6 @@ const ConversationsScreen: React.FC = () => {
   const navigation = useNavigation<any>();
   const dispatch = useAppDispatch();
   const conversations = useAppSelector(state => state.message.conversations);
-  const channels = useAppSelector(state => state.teams.channels);
   const query = useAppSelector(state => state.teams.searchQuery);
 
   const filtered = useMemo(() => {
@@ -43,43 +41,41 @@ const ConversationsScreen: React.FC = () => {
 
   const openChat = (conversation: Conversation) => {
     dispatch(markMessageAsRead(conversation.id));
-    navigation.navigate('Messages', { conversationId: conversation.id });
+    navigation.navigate('Messages', {
+      conversationId: conversation.id,
+      subtitle: 'Last seen recently',
+      title: `${conversation.participant.firstName} ${conversation.participant.lastName}`,
+    });
   };
 
   return (
     <View style={styles.screen}>
-      <View style={styles.headerBand}>
-        <Text style={styles.title}>Chat</Text>
-        <Pressable style={styles.newChatButton}>
-          <CustomIcon icon={Icons.editIcon} color={COLORS.TEXT_INVERSE} size={18} />
-          <Text style={styles.newChatText}>New</Text>
-        </Pressable>
-      </View>
-
-      <SearchInput
-        value={query}
-        onChangeText={value => dispatch(setTeamsSearchQuery(value))}
-        placeholder="Search chats and channels"
-        style={styles.search}
-      />
-
       <ScrollView
         horizontal
         showsHorizontalScrollIndicator={false}
         contentContainerStyle={styles.channelRail}
       >
-        {channels.map(channel => (
-          <View key={channel.id} style={styles.channelChip}>
-            <Text style={styles.channelTeam}>{channel.teamName}</Text>
-            <Text style={styles.channelName}># {channel.channelName}</Text>
-            {channel.unreadCount > 0 ? (
-              <View style={styles.channelBadge}>
-                <Text style={styles.badgeText}>{channel.unreadCount}</Text>
-              </View>
-            ) : null}
+        {['Recent', 'Unread', 'Mentions', 'Threads'].map((item, index) => (
+          <View key={item} style={[styles.channelChip, index === 0 && styles.activeChip]}>
+            <CustomIcon
+              icon={
+                index === 0
+                  ? Icons.returnRightIcon
+                  : index === 1
+                  ? Icons.muteNotificationIcon
+                  : index === 2
+                  ? Icons.emailIcon
+                  : Icons.replyIcon
+              }
+              color="#E8E8E8"
+              size={22}
+            />
+            <Text style={styles.channelName}>{item}</Text>
           </View>
         ))}
       </ScrollView>
+
+      <Text style={styles.sectionTitle}>Favourites</Text>
 
       <FlatList
         data={filtered}
@@ -111,6 +107,9 @@ const ConversationsScreen: React.FC = () => {
           </Pressable>
         )}
       />
+      <Pressable style={styles.fab}>
+        <CustomIcon icon={Icons.editIcon} color="#000000" size={28} />
+      </Pressable>
     </View>
   );
 };
@@ -127,6 +126,10 @@ const styles = StyleSheet.create({
   avatarText: {
     color: COLORS.TEXT_INVERSE,
     fontWeight: '700',
+  },
+  activeChip: {
+    borderBottomColor: '#7E84FF',
+    borderBottomWidth: 2,
   },
   badgeText: {
     color: COLORS.TEXT_INVERSE,
@@ -146,87 +149,70 @@ const styles = StyleSheet.create({
     top: 8,
   },
   channelChip: {
-    backgroundColor: COLORS.BACKGROUND,
-    borderColor: '#E1E1EC',
-    borderRadius: 8,
-    borderWidth: 1,
+    alignItems: 'center',
+    backgroundColor: '#242424',
+    borderRadius: 12,
     marginRight: SPACING.S,
-    minWidth: 160,
-    padding: SPACING.M,
-  },
-  channelName: {
-    ...TYPOGRAPHY.SUBTITLE2,
-    color: COLORS.TEXT_PRIMARY,
-    marginTop: 2,
-  },
-  channelRail: {
+    minWidth: 132,
     paddingHorizontal: SPACING.M,
     paddingVertical: SPACING.S,
   },
-  channelTeam: {
-    ...TYPOGRAPHY.CAPTION,
-    color: COLORS.TEXT_SECONDARY,
+  channelName: {
+    ...TYPOGRAPHY.BODY2,
+    color: '#E8E8E8',
+    marginTop: 6,
   },
-  headerBand: {
-    alignItems: 'center',
-    flexDirection: 'row',
-    justifyContent: 'space-between',
+  channelRail: {
     paddingHorizontal: SPACING.M,
-    paddingTop: SPACING.M,
+    paddingVertical: SPACING.M,
   },
   info: {
     flex: 1,
     marginLeft: SPACING.M,
   },
   list: {
-    paddingBottom: SPACING.L,
+    paddingBottom: 108,
   },
   name: {
     ...TYPOGRAPHY.SUBTITLE2,
-    color: COLORS.TEXT_PRIMARY,
+    color: '#F4F4F4',
     flex: 1,
   },
-  newChatButton: {
+  fab: {
     alignItems: 'center',
-    backgroundColor: COLORS.PRIMARY,
-    borderRadius: 8,
-    flexDirection: 'row',
-    gap: 6,
-    paddingHorizontal: SPACING.M,
-    paddingVertical: SPACING.S,
-  },
-  newChatText: {
-    color: COLORS.TEXT_INVERSE,
-    fontWeight: '700',
+    backgroundColor: '#7E84FF',
+    borderRadius: 33,
+    bottom: 28,
+    height: 66,
+    justifyContent: 'center',
+    position: 'absolute',
+    right: 28,
+    width: 66,
   },
   preview: {
     ...TYPOGRAPHY.BODY2,
-    color: COLORS.TEXT_SECONDARY,
+    color: '#9B9B9B',
     marginTop: 4,
   },
   row: {
     alignItems: 'center',
-    backgroundColor: COLORS.BACKGROUND,
-    borderBottomColor: '#EEEEF4',
-    borderBottomWidth: 1,
+    backgroundColor: '#000000',
     flexDirection: 'row',
     padding: SPACING.M,
   },
   screen: {
-    backgroundColor: '#F7F7FB',
+    backgroundColor: '#000000',
     flex: 1,
   },
-  search: {
-    margin: SPACING.M,
-    marginBottom: 0,
+  sectionTitle: {
+    ...TYPOGRAPHY.SUBTITLE1,
+    color: '#F4F4F4',
+    paddingHorizontal: SPACING.M,
+    paddingBottom: SPACING.S,
   },
   time: {
     ...TYPOGRAPHY.CAPTION,
-    color: COLORS.TEXT_TERTIARY,
-  },
-  title: {
-    ...TYPOGRAPHY.H2,
-    color: COLORS.TEXT_PRIMARY,
+    color: '#9B9B9B',
   },
   topRow: {
     alignItems: 'center',

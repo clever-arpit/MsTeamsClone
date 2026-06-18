@@ -5,6 +5,7 @@ import {
   StyleProp,
   ColorValue,
   TouchableOpacity,
+  TextProps,
 } from 'react-native';
 import Config from 'react-native-config';
 import { isValidUrl, openUrl } from '../utils/Helper';
@@ -19,6 +20,8 @@ interface CustomTextProps {
   fontFamily?: TextStyle['fontFamily'];
   textAlign?: TextStyle['textAlign'];
   customStyle?: StyleProp<TextStyle>;
+  numberOfLines?: TextProps['numberOfLines'];
+  ellipsizeMode?: TextProps['ellipsizeMode'];
   onPress?: (() => void) | null;
 }
 
@@ -31,6 +34,8 @@ const CustomText: React.FC<CustomTextProps> = ({
   fontFamily = Config.FONT_FAMILY,
   textAlign = 'auto',
   customStyle = null,
+  numberOfLines,
+  ellipsizeMode,
   onPress = null,
 }) => {
   const { colors } = useTheme();
@@ -40,6 +45,8 @@ const CustomText: React.FC<CustomTextProps> = ({
   return hasUrl ? (
     <TouchableOpacity onPress={() => openUrl(text)}>
       <Text
+        ellipsizeMode={ellipsizeMode}
+        numberOfLines={numberOfLines}
         style={[
           {
             fontSize,
@@ -58,6 +65,8 @@ const CustomText: React.FC<CustomTextProps> = ({
   ) : onPress && !hasUrl ? (
     <TouchableOpacity onPress={onPress ?? undefined}>
       <Text
+        ellipsizeMode={ellipsizeMode}
+        numberOfLines={numberOfLines}
         style={[
           {
             fontSize,
@@ -76,6 +85,8 @@ const CustomText: React.FC<CustomTextProps> = ({
     </TouchableOpacity>
   ) : (
     <Text
+      ellipsizeMode={ellipsizeMode}
+      numberOfLines={numberOfLines}
       style={[
         {
           fontSize,

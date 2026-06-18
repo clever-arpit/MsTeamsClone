@@ -3,46 +3,22 @@ import { FlatList, Pressable, StyleSheet, Text, View } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import { useAppSelector } from '../../redux/hooks';
 import CustomIcon from '../../components/CustomIcon';
-import SearchInput from '../../components/SearchInput';
 import Icons from '../../utils/Icons';
 import { COLORS, SPACING, TYPOGRAPHY } from '../../styles';
 
-const filters = ['All', 'Missed', 'Video'] as const;
+const filters = ['Speed dial', 'Recent'] as const;
 
 const CallsScreen: React.FC = () => {
   const navigation = useNavigation<any>();
   const calls = useAppSelector(state => state.teams.calls);
-  const [query, setQuery] = useState('');
-  const [filter, setFilter] = useState<(typeof filters)[number]>('All');
+  const [filter, setFilter] = useState<(typeof filters)[number]>('Speed dial');
 
   const filtered = useMemo(() => {
-    const normalized = query.trim().toLowerCase();
-    return calls.filter(call => {
-      const fullName = `${call.contact.firstName} ${call.contact.lastName}`.toLowerCase();
-      const matchesQuery = !normalized || fullName.includes(normalized);
-      const matchesFilter =
-        filter === 'All' ||
-        (filter === 'Missed' && call.direction === 'missed') ||
-        (filter === 'Video' && call.type === 'video');
-      return matchesQuery && matchesFilter;
-    });
-  }, [calls, filter, query]);
+    return filter === 'Recent' ? calls : [];
+  }, [calls, filter]);
 
   return (
     <View style={styles.screen}>
-      <View style={styles.headerBand}>
-        <Text style={styles.title}>Calls</Text>
-        <Pressable style={styles.dialButton}>
-          <CustomIcon icon={Icons.dialpadIcon} color={COLORS.TEXT_INVERSE} size={18} />
-          <Text style={styles.dialText}>Dial</Text>
-        </Pressable>
-      </View>
-      <SearchInput
-        value={query}
-        onChangeText={setQuery}
-        placeholder="Search call history"
-        style={styles.search}
-      />
       <View style={styles.filterRow}>
         {filters.map(item => (
           <Pressable
@@ -65,6 +41,25 @@ const CallsScreen: React.FC = () => {
         data={filtered}
         keyExtractor={item => item.id}
         contentContainerStyle={styles.list}
+        ListEmptyComponent={
+          <View style={styles.emptyState}>
+            <View style={styles.emptyIconStack}>
+              <View style={styles.emptyBubbleSmall}>
+                <CustomIcon icon={Icons.userIcon} color="#C07DFF" size={34} />
+              </View>
+              <View style={styles.emptyBubbleMid}>
+                <CustomIcon icon={Icons.userIcon} color="#39B8FF" size={30} />
+              </View>
+              <View style={styles.emptyBubbleAdd}>
+                <CustomIcon icon={Icons.addIcon} color="#575757" size={36} />
+              </View>
+            </View>
+            <Text style={styles.emptyTitle}>Add your speed dial numbers</Text>
+            <Text style={styles.emptyText}>
+              When you add contacts to your speed dial, you'll see them here
+            </Text>
+          </View>
+        }
         renderItem={({ item }) => (
           <Pressable
             style={styles.row}
@@ -99,15 +94,26 @@ const CallsScreen: React.FC = () => {
             </View>
             <View style={styles.actions}>
               <Pressable style={styles.iconButton}>
-                <CustomIcon icon={Icons.callsIcon} color={COLORS.PRIMARY} size={19} />
+                <CustomIcon
+                  icon={Icons.callsIcon}
+                  color={COLORS.PRIMARY}
+                  size={19}
+                />
               </Pressable>
               <Pressable style={styles.iconButton}>
-                <CustomIcon icon={Icons.cameraIcon} color={COLORS.PRIMARY} size={19} />
+                <CustomIcon
+                  icon={Icons.cameraIcon}
+                  color={COLORS.PRIMARY}
+                  size={19}
+                />
               </Pressable>
             </View>
           </Pressable>
         )}
       />
+      <Pressable style={styles.fab}>
+        <CustomIcon icon={Icons.phoneIcon} color="#ffffff" size={30} />
+      </Pressable>
     </View>
   );
 };
@@ -118,11 +124,10 @@ const styles = StyleSheet.create({
     gap: SPACING.S,
   },
   activeFilter: {
-    backgroundColor: COLORS.PRIMARY,
-    borderColor: COLORS.PRIMARY,
+    backgroundColor: '#7E84FF',
   },
   activeFilterText: {
-    color: COLORS.TEXT_INVERSE,
+    color: '#fff',
   },
   avatar: {
     alignItems: 'center',
@@ -136,41 +141,90 @@ const styles = StyleSheet.create({
     color: COLORS.TEXT_INVERSE,
     fontWeight: '700',
   },
-  dialButton: {
+  emptyBubbleAdd: {
     alignItems: 'center',
-    backgroundColor: COLORS.PRIMARY,
-    borderRadius: 8,
-    flexDirection: 'row',
-    gap: 6,
-    paddingHorizontal: SPACING.M,
-    paddingVertical: SPACING.S,
+    backgroundColor: '#D8A21B',
+    borderRadius: 40,
+    height: 80,
+    justifyContent: 'center',
+    position: 'absolute',
+    right: 8,
+    top: 78,
+    width: 80,
   },
-  dialText: {
-    color: COLORS.TEXT_INVERSE,
-    fontWeight: '700',
+  emptyBubbleMid: {
+    alignItems: 'center',
+    backgroundColor: '#2A2A2A',
+    borderRadius: 34,
+    height: 68,
+    justifyContent: 'center',
+    left: 95,
+    position: 'absolute',
+    top: 57,
+    width: 68,
+  },
+  emptyBubbleSmall: {
+    alignItems: 'center',
+    backgroundColor: '#2A2A2A',
+    borderRadius: 42,
+    height: 84,
+    justifyContent: 'center',
+    left: 30,
+    position: 'absolute',
+    top: 24,
+    width: 84,
+  },
+  emptyIconStack: {
+    height: 170,
+    width: 210,
+  },
+  emptyState: {
+    alignItems: 'center',
+    flex: 1,
+    justifyContent: 'center',
+    minHeight: 560,
+    paddingHorizontal: SPACING.L,
+  },
+  emptyText: {
+    ...TYPOGRAPHY.SUBTITLE1,
+    color: '#9B9B9B',
+    lineHeight: 31,
+    marginTop: SPACING.M,
+    maxWidth: 340,
+    textAlign: 'center',
+  },
+  emptyTitle: {
+    ...TYPOGRAPHY.H2,
+    color: '#323232',
+    marginTop: SPACING.L,
+    textAlign: 'center',
+  },
+  fab: {
+    alignItems: 'center',
+    backgroundColor: '#7E84FF',
+    borderRadius: 40,
+    bottom: 56,
+    height: 65,
+    width: 65,
+    justifyContent: 'center',
+    position: 'absolute',
+    right: 32,
   },
   filterChip: {
-    borderColor: '#DAD9EA',
-    borderRadius: 8,
-    borderWidth: 1,
-    paddingHorizontal: SPACING.M,
-    paddingVertical: SPACING.S,
+    backgroundColor: '#fff',
+    borderRadius: 24,
+    paddingHorizontal: SPACING.L,
+    paddingVertical: 12,
   },
   filterRow: {
     flexDirection: 'row',
     gap: SPACING.S,
-    padding: SPACING.M,
-  },
-  filterText: {
-    color: COLORS.TEXT_SECONDARY,
-    fontWeight: '700',
-  },
-  headerBand: {
-    alignItems: 'center',
-    flexDirection: 'row',
-    justifyContent: 'space-between',
     paddingHorizontal: SPACING.M,
     paddingTop: SPACING.M,
+  },
+  filterText: {
+    color: '#000',
+    fontSize: 20,
   },
   iconButton: {
     alignItems: 'center',
@@ -185,11 +239,13 @@ const styles = StyleSheet.create({
     marginLeft: SPACING.M,
   },
   list: {
-    paddingBottom: SPACING.L,
+    flexGrow: 1,
+    paddingTop: 20,
+    paddingBottom: 130,
   },
   meta: {
     ...TYPOGRAPHY.BODY2,
-    color: COLORS.TEXT_SECONDARY,
+    color: '#787878',
     marginTop: 3,
     textTransform: 'capitalize',
   },
@@ -198,32 +254,23 @@ const styles = StyleSheet.create({
   },
   name: {
     ...TYPOGRAPHY.SUBTITLE2,
-    color: COLORS.TEXT_PRIMARY,
+    color: '#2e2e2e',
   },
   row: {
     alignItems: 'center',
-    backgroundColor: COLORS.BACKGROUND,
-    borderBottomColor: '#EEEEF4',
+    backgroundColor: '#fff',
+    borderBottomColor: '#cdcdcd',
     borderBottomWidth: 1,
     flexDirection: 'row',
     padding: SPACING.M,
   },
   screen: {
-    backgroundColor: '#F7F7FB',
     flex: 1,
-  },
-  search: {
-    margin: SPACING.M,
-    marginBottom: 0,
   },
   time: {
     ...TYPOGRAPHY.CAPTION,
-    color: COLORS.TEXT_TERTIARY,
+    color: '#727272',
     marginTop: 4,
-  },
-  title: {
-    ...TYPOGRAPHY.H2,
-    color: COLORS.TEXT_PRIMARY,
   },
 });
 

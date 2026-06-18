@@ -103,12 +103,12 @@ export interface ThemeColors {
 
 export const lightTheme: ThemeColors = {
   status_bar_style: 'dark-content',
-  primary: '#007ac3',
+  primary: '#6264A7',
   background: '#fff',
   drawer_background: '#fff',
-  tab_icon: '#9DCCF2',
+  tab_icon: '#767677',
   tab_icon_focus: '#fff',
-  tab_background: '#007ac3',
+  tab_background: '#fff',
   tab_border_color: '#EDEDED',
   tab_border_focus_color: '#8fc6f4',
   green: '#30BD17',

@@ -1,12 +1,26 @@
 import React from 'react';
-import { Pressable, StyleSheet, Text, View } from 'react-native';
+import { Pressable, StyleSheet, View } from 'react-native';
 import { BottomTabBarProps } from '@react-navigation/bottom-tabs';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import CustomIcon from './CustomIcon';
-import { COLORS } from '../styles';
+import CustomText from './CustomText';
+import { useTheme } from '../hooks/ThemeContext';
 
 const BottomTabs: React.FC<BottomTabBarProps> = ({ state, descriptors, navigation }) => {
+  const insets = useSafeAreaInsets();
+  const { colors } = useTheme();
+
   return (
-    <View style={styles.container}>
+    <View
+      style={[
+        styles.container,
+        {
+          backgroundColor: colors.tab_background,
+          borderTopColor: colors.tab_border_color,
+          paddingBottom: Math.max(insets.bottom, 10),
+        },
+      ]}
+    >
       {state.routes.map((route, index) => {
         const descriptor = descriptors[route.key];
         const options = descriptor.options;
@@ -17,7 +31,9 @@ const BottomTabs: React.FC<BottomTabBarProps> = ({ state, descriptors, navigatio
             ? options.title
             : route.name;
         const focused = state.index === index;
-        const color = focused ? COLORS.PRIMARY : COLORS.TEXT_TERTIARY;
+        const color = focused
+          ? colors.teams_purple ?? colors.tab_icon_focus
+          : colors.tab_icon;
         const badge = options.tabBarBadge;
 
         const onPress = () => {
@@ -40,19 +56,26 @@ const BottomTabs: React.FC<BottomTabBarProps> = ({ state, descriptors, navigatio
             onPress={onPress}
             style={styles.tab}
           >
-            <View style={[styles.iconWrap, focused && styles.activeIconWrap]}>
+            <View style={styles.iconWrap}>
               {typeof options.tabBarIcon === 'function'
                 ? options.tabBarIcon({ focused, color, size: 22 })
                 : null}
               {badge ? (
                 <View style={styles.badge}>
-                  <Text style={styles.badgeText}>{String(badge)}</Text>
+                  <CustomText
+                    text={String(badge)}
+                    color={colors.white}
+                    customStyle={styles.badgeText}
+                  />
                 </View>
               ) : null}
             </View>
-            <Text style={[styles.label, { color }]} numberOfLines={1}>
-              {String(label)}
-            </Text>
+            <CustomText
+              text={String(label)}
+              color={color}
+              numberOfLines={1}
+              customStyle={styles.label}
+            />
           </Pressable>
         );
       })}
@@ -65,12 +88,9 @@ export const TabIcon = ({ icon, color }: { icon: any; color: string }) => (
 );
 
 const styles = StyleSheet.create({
-  activeIconWrap: {
-    backgroundColor: COLORS.PRIMARY_LIGHT,
-  },
   badge: {
     alignItems: 'center',
-    backgroundColor: COLORS.ERROR,
+    backgroundColor: '#E85D56',
     borderRadius: 8,
     minWidth: 16,
     paddingHorizontal: 4,
@@ -79,30 +99,25 @@ const styles = StyleSheet.create({
     top: -2,
   },
   badgeText: {
-    color: COLORS.TEXT_INVERSE,
     fontSize: 10,
     fontWeight: '700',
   },
   container: {
-    backgroundColor: COLORS.BACKGROUND,
-    borderTopColor: '#DCDCE8',
     borderTopWidth: 1,
     flexDirection: 'row',
-    minHeight: 64,
-    paddingBottom: 4,
-    paddingTop: 6,
+    minHeight: 74,
+    paddingTop: 9,
   },
   iconWrap: {
     alignItems: 'center',
-    borderRadius: 8,
-    height: 30,
+    height: 28,
     justifyContent: 'center',
-    width: 44,
+    width: 42,
   },
   label: {
-    fontSize: 11,
-    fontWeight: '600',
-    marginTop: 2,
+    fontSize: 12,
+    fontWeight: '500',
+    marginTop: 4,
   },
   tab: {
     alignItems: 'center',

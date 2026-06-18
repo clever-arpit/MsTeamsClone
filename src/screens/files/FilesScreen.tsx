@@ -37,14 +37,6 @@ const FilesScreen: React.FC = () => {
 
   return (
     <View style={styles.screen}>
-      <View style={styles.headerBand}>
-        <Text style={styles.title}>Files</Text>
-        <Pressable style={styles.uploadButton}>
-          <CustomIcon icon={Icons.uploadIcon} color={COLORS.TEXT_INVERSE} size={18} />
-          <Text style={styles.uploadText}>Upload</Text>
-        </Pressable>
-      </View>
-
       <SearchInput
         value={query}
         onChangeText={setQuery}
@@ -116,45 +108,38 @@ const styles = StyleSheet.create({
   },
   fileIcon: {
     alignItems: 'center',
-    backgroundColor: COLORS.PRIMARY_LIGHT,
+    backgroundColor: '#242044',
     borderRadius: 8,
     height: 44,
     justifyContent: 'center',
     width: 44,
-  },
-  headerBand: {
-    alignItems: 'center',
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    paddingHorizontal: SPACING.M,
-    paddingTop: SPACING.M,
   },
   info: {
     flex: 1,
     marginLeft: SPACING.M,
   },
   list: {
-    paddingBottom: SPACING.L,
+    paddingBottom: 100,
   },
   meta: {
     ...TYPOGRAPHY.BODY2,
-    color: COLORS.TEXT_SECONDARY,
+    color: '#9B9B9B',
     marginTop: 3,
   },
   name: {
     ...TYPOGRAPHY.SUBTITLE2,
-    color: COLORS.TEXT_PRIMARY,
+    color: '#F4F4F4',
   },
   row: {
     alignItems: 'center',
-    backgroundColor: COLORS.BACKGROUND,
-    borderBottomColor: '#EEEEF4',
+    backgroundColor: '#000000',
+    borderBottomColor: '#242424',
     borderBottomWidth: 1,
     flexDirection: 'row',
     padding: SPACING.M,
   },
   screen: {
-    backgroundColor: '#F7F7FB',
+    backgroundColor: '#000000',
     flex: 1,
   },
   search: {
@@ -166,18 +151,18 @@ const styles = StyleSheet.create({
     borderLeftWidth: 4,
   },
   storageLink: {
-    color: COLORS.PRIMARY,
+    color: '#9CA0FF',
     fontWeight: '700',
   },
   storageMeta: {
     ...TYPOGRAPHY.BODY2,
-    color: COLORS.TEXT_SECONDARY,
+    color: '#9B9B9B',
     marginTop: 2,
   },
   storageStrip: {
     alignItems: 'center',
-    backgroundColor: COLORS.BACKGROUND,
-    borderColor: '#E1E1EC',
+    backgroundColor: '#171717',
+    borderColor: '#2A2A2A',
     borderRadius: 8,
     borderWidth: 1,
     flexDirection: 'row',
@@ -188,29 +173,12 @@ const styles = StyleSheet.create({
   },
   storageTitle: {
     ...TYPOGRAPHY.SUBTITLE2,
-    color: COLORS.TEXT_PRIMARY,
+    color: '#F4F4F4',
   },
   time: {
     ...TYPOGRAPHY.CAPTION,
-    color: COLORS.TEXT_TERTIARY,
+    color: '#8F8F8F',
     marginTop: 4,
-  },
-  title: {
-    ...TYPOGRAPHY.H2,
-    color: COLORS.TEXT_PRIMARY,
-  },
-  uploadButton: {
-    alignItems: 'center',
-    backgroundColor: COLORS.PRIMARY,
-    borderRadius: 8,
-    flexDirection: 'row',
-    gap: 6,
-    paddingHorizontal: SPACING.M,
-    paddingVertical: SPACING.S,
-  },
-  uploadText: {
-    color: COLORS.TEXT_INVERSE,
-    fontWeight: '700',
   },
 });
 

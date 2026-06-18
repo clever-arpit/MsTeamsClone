@@ -1,4 +1,4 @@
-import React, { useMemo } from 'react';
+import React from 'react';
 import { FlatList, Pressable, StyleSheet, Text, View } from 'react-native';
 import { markActivityRead, markAllActivitiesRead } from '../../redux';
 import { useAppDispatch, useAppSelector } from '../../redux/hooks';
@@ -25,25 +25,19 @@ const iconForType = (type: TeamsActivity['type']) => {
 const ActivityScreen: React.FC = () => {
   const dispatch = useAppDispatch();
   const activities = useAppSelector(state => state.teams.activities);
-  const unreadCount = useMemo(
-    () => activities.filter(item => item.unread).length,
-    [activities],
-  );
 
   return (
     <View style={styles.screen}>
-      <View style={styles.headerBand}>
-        <View>
-          <Text style={styles.title}>Activity</Text>
-          <Text style={styles.subtitle}>{unreadCount} unread updates</Text>
-        </View>
-        <Pressable
-          onPress={() => dispatch(markAllActivitiesRead())}
-          style={styles.markButton}
-        >
-          <CustomIcon icon={Icons.readAllIcon} color={COLORS.PRIMARY} size={18} />
-          <Text style={styles.markButtonText}>Read all</Text>
-        </Pressable>
+      <View style={styles.filterRail}>
+        {['Unread', '@Mentions', 'Replies', 'Reactions'].map(item => (
+          <Pressable
+            key={item}
+            onPress={() => item === 'Unread' && dispatch(markAllActivitiesRead())}
+            style={styles.filterChip}
+          >
+            <Text style={styles.filterText}>{item}</Text>
+          </Pressable>
+        ))}
       </View>
 
       <FlatList
@@ -85,7 +79,7 @@ const ActivityScreen: React.FC = () => {
 const styles = StyleSheet.create({
   body: {
     ...TYPOGRAPHY.BODY2,
-    color: COLORS.TEXT_SECONDARY,
+    color: '#9B9B9B',
     marginTop: 4,
   },
   dot: {
@@ -95,11 +89,24 @@ const styles = StyleSheet.create({
     marginLeft: SPACING.S,
     width: 10,
   },
-  headerBand: {
-    alignItems: 'center',
+  filterChip: {
+    backgroundColor: '#000000',
+    borderColor: '#313131',
+    borderRadius: 24,
+    borderWidth: 1,
+    marginRight: SPACING.S,
+    paddingHorizontal: SPACING.L,
+    paddingVertical: 10,
+  },
+  filterRail: {
+    backgroundColor: '#141414',
     flexDirection: 'row',
-    justifyContent: 'space-between',
-    padding: SPACING.M,
+    paddingHorizontal: SPACING.M,
+    paddingVertical: SPACING.S,
+  },
+  filterText: {
+    color: '#E8E8E8',
+    fontSize: 18,
   },
   iconCircle: {
     alignItems: 'center',
@@ -115,50 +122,27 @@ const styles = StyleSheet.create({
   },
   itemTitle: {
     ...TYPOGRAPHY.SUBTITLE2,
-    color: COLORS.TEXT_PRIMARY,
+    color: '#F4F4F4',
     flex: 1,
   },
   list: {
-    paddingBottom: SPACING.L,
-  },
-  markButton: {
-    alignItems: 'center',
-    borderColor: '#DAD9EA',
-    borderRadius: 8,
-    borderWidth: 1,
-    flexDirection: 'row',
-    gap: 6,
-    paddingHorizontal: SPACING.M,
-    paddingVertical: SPACING.S,
-  },
-  markButtonText: {
-    color: COLORS.PRIMARY,
-    fontWeight: '700',
+    paddingBottom: 100,
   },
   row: {
-    backgroundColor: COLORS.BACKGROUND,
-    borderBottomColor: '#EEEEF4',
+    backgroundColor: '#000000',
+    borderBottomColor: '#242424',
     borderBottomWidth: 1,
     flexDirection: 'row',
     padding: SPACING.M,
   },
   screen: {
-    backgroundColor: '#F7F7FB',
+    backgroundColor: '#141414',
     flex: 1,
-  },
-  subtitle: {
-    ...TYPOGRAPHY.BODY2,
-    color: COLORS.TEXT_SECONDARY,
-    marginTop: 2,
   },
   time: {
     ...TYPOGRAPHY.CAPTION,
-    color: COLORS.TEXT_TERTIARY,
+    color: '#8F8F8F',
     marginTop: SPACING.S,
-  },
-  title: {
-    ...TYPOGRAPHY.H2,
-    color: COLORS.TEXT_PRIMARY,
   },
   topRow: {
     alignItems: 'center',

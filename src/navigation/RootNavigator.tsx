@@ -1,11 +1,9 @@
 import React from 'react';
-import { StyleSheet } from 'react-native';
 import { NavigationContainer } from '@react-navigation/native';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { useAppSelector } from '../redux/hooks';
-import { useTheme } from '../hooks/ThemeContext';
-import { AppHeader } from '../components/common';
+import { NavigationHeader } from '../components/common';
 import ActivityScreen from '../screens/activity/ActivityScreen';
 import LoginScreen from '../screens/auth/LoginScreen';
 import SplashScreen from '../screens/auth/SplashScreen';
@@ -39,7 +37,6 @@ const AuthStack = () => {
 };
 
 const AppTabs = () => {
-  const { colors } = useTheme();
   const unreadNotifications = useAppSelector(
     state => state.notification.unreadCount,
   );
@@ -48,8 +45,8 @@ const AppTabs = () => {
     <Tab.Navigator
       tabBar={props => <BottomTabs {...props} />}
       screenOptions={({ navigation }) => ({
-        tabBarActiveTintColor: colors.teams_purple,
-        tabBarInactiveTintColor: '#8A8D91',
+        tabBarActiveTintColor: '#7E84FF',
+        tabBarInactiveTintColor: '#E8E8E8',
         tabBarShowLabel: true,
         tabBarLabelStyle: {
           fontSize: 11,
@@ -57,8 +54,8 @@ const AppTabs = () => {
           paddingTop: 2,
         },
         tabBarStyle: {
-          backgroundColor: '#FFFFFF',
-          borderTopColor: '#D0CACE',
+          backgroundColor: '#171717',
+          borderTopColor: '#2B2B2B',
           borderTopWidth: 1,
           elevation: 8,
           paddingBottom: 0,
@@ -74,27 +71,24 @@ const AppTabs = () => {
           fontSize: 10,
           fontWeight: '700',
         },
-        headerShown: true,
-        headerStyle: {
-          backgroundColor: '#FFFFFF',
-          elevation: 0,
-          shadowOpacity: 0,
-        },
-        headerTitle: () => <AppHeader navigation={navigation} />,
-        headerTitleAlign: 'center',
-        headerLeft: () => null,
-        headerRight: () => null,
+        header: ({ route, options }) => (
+          <NavigationHeader
+            navigation={navigation}
+            routeName={route.name}
+            title={typeof options.title === 'string' ? options.title : route.name}
+            variant="tabs"
+          />
+        ),
       })}
     >
       <Tab.Screen
-        name="ActivityTab"
-        component={ActivityScreen}
+        name="CallsTab"
+        component={CallsScreen}
         options={{
-          title: 'Activity',
-          tabBarLabel: 'Activity',
-          tabBarBadge: unreadNotifications > 0 ? unreadNotifications : undefined,
+          title: 'Calls',
+          tabBarLabel: 'Calls',
           tabBarIcon: ({ color }) => (
-            <TabIcon icon={Icons.activityIcon} color={color} />
+            <TabIcon icon={Icons.callsIcon} color={color} />
           ),
         }}
       />
@@ -110,17 +104,6 @@ const AppTabs = () => {
         }}
       />
       <Tab.Screen
-        name="CallsTab"
-        component={CallsScreen}
-        options={{
-          title: 'Calls',
-          tabBarLabel: 'Calls',
-          tabBarIcon: ({ color }) => (
-            <TabIcon icon={Icons.callsIcon} color={color} />
-          ),
-        }}
-      />
-      <Tab.Screen
         name="FilesTab"
         component={FilesScreen}
         options={{
@@ -132,10 +115,22 @@ const AppTabs = () => {
         }}
       />
       <Tab.Screen
+        name="ActivityTab"
+        component={ActivityScreen}
+        options={{
+          title: 'Activity',
+          tabBarLabel: 'Activity',
+          tabBarBadge: unreadNotifications > 0 ? unreadNotifications : undefined,
+          tabBarIcon: ({ color }) => (
+            <TabIcon icon={Icons.activityIcon} color={color} />
+          ),
+        }}
+      />
+      <Tab.Screen
         name="CalendarTab"
         component={CalendarScreen}
         options={{
-          title: 'Calendar',
+          title: 'June',
           tabBarLabel: 'Calendar',
           tabBarIcon: ({ color }) => (
             <TabIcon icon={Icons.calendarIcon} color={color} />
@@ -162,60 +157,69 @@ const RootNavigator = () => {
 
   return (
     <NavigationContainer>
-      <Stack.Navigator screenOptions={{ headerShown: false }}>
+      <Stack.Navigator
+        screenOptions={{
+          header: ({ navigation, route, options }) => (
+            <NavigationHeader
+              navigation={navigation}
+              routeName={route.name}
+              subtitle={
+                (route.params as { subtitle?: string } | undefined)?.subtitle
+              }
+              title={
+                typeof options.title === 'string' ? options.title : route.name
+              }
+            />
+          ),
+        }}
+      >
         {!isAuthenticated ? (
-          <Stack.Screen name="Auth" component={AuthStack} />
+          <Stack.Screen
+            name="Auth"
+            component={AuthStack}
+            options={{ headerShown: false }}
+          />
         ) : (
           <>
-            <Stack.Screen name="App" component={AppTabs} />
+            <Stack.Screen
+              name="App"
+              component={AppTabs}
+              options={{ headerShown: false }}
+            />
             <Stack.Screen
               name="Messages"
               component={ChatScreen}
-              options={{
-                headerShown: false,
-              }}
+              options={({ route }) => ({
+                title:
+                  (route.params as { title?: string } | undefined)?.title ??
+                  'Chat',
+              })}
             />
             <Stack.Screen
               name="CallDetail"
               component={CallDetailScreen}
-              options={{ headerShown: true, headerTitle: 'Call details' }}
+              options={{ title: 'Call details' }}
             />
             <Stack.Screen
               name="Search"
               component={SearchScreen}
-              options={{
-                headerShown: true,
-                headerTitle: 'Search',
-                headerStyle: styles.stackHeader,
-                headerTitleStyle: styles.stackHeaderTitle,
-              }}
+              options={{ title: 'Search' }}
             />
             <Stack.Screen
               name="Profile"
               component={ProfileScreen}
-              options={{
-                headerShown: true,
-                headerTitle: 'Profile',
-                headerStyle: styles.stackHeader,
-                headerTitleStyle: styles.stackHeaderTitle,
-              }}
+              options={{ title: 'Profile' }}
             />
           </>
         )}
-        <Stack.Screen name="Splash" component={SplashScreen} />
+        <Stack.Screen
+          name="Splash"
+          component={SplashScreen}
+          options={{ headerShown: false }}
+        />
       </Stack.Navigator>
     </NavigationContainer>
   );
 };
 
 export default RootNavigator;
-
-const styles = StyleSheet.create({
-  stackHeader: {
-    backgroundColor: '#FFFFFF',
-  },
-  stackHeaderTitle: {
-    color: '#000000',
-    fontWeight: '700',
-  },
-});
